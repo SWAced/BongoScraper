@@ -16,6 +16,8 @@ import re
 import platform
 
 try:
+    delay = int(input("Enter the delay between expanding pages. For a fast setup, use 2. For a mediocre setup, use 4. For a slower setup, use 6. It is not recommended to run this script on a slower machine as it will greatly delay the scraping.\n"))
+
     url = "https://www.bongo.be/nl/cadeaubonnen.html?sortby=position&page=1&pagesize=24&="
 
     total_data = []
@@ -46,7 +48,7 @@ try:
     while True:
         try:
             wb.find_element_by_id("search-more-results").click()
-            time.sleep(2)
+            time.sleep(delay)
         except:
             break
 
@@ -92,6 +94,6 @@ try:
     input("Press any key to close the window.\n")
     exit()
 except Exception as exe:
-    print("Could not continue process because of the following exception: ", exe)
+    print("Could not continue process because of the following exception: ", str(exe))
     input('')
-    exit()
+    exit() 
