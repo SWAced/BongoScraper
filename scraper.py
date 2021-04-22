@@ -10,7 +10,6 @@ subprocess.check_call([sys.executable, '-m', 'pip', 'install',
 from selenium import webdriver
 import time
 import os
-from bs4 import BeautifulSoup
 import csv
 import re
 import platform

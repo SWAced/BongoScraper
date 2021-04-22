@@ -7,27 +7,18 @@ subprocess.check_call([sys.executable, '-m', 'pip', 'install',
 subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
 'bs4'])
 
-subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
-'pandas'])
-
-subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
-'numpy'])
-
 from selenium import webdriver
 import time
 import os
-from bs4 import BeautifulSoup
 import csv
 import re
 import platform
-import numpy
-import pandas
 from datetime import datetime
 
 try:
 
-    review_limit = int(input("Enter the minimum amount of reviews you'd like to consider for the scraper: "))
-    date_limit = datetime.strptime(datetime.strptime(input("Enter the oldest date you'd like to consider for the scraper (for example: 15/11/2001 => dd/mm/yyyy): "), '%d/%m/%Y').strftime("%d/%m/%Y"), '%d/%m/%Y')
+    review_limit = int(input("\nEnter the minimum amount of reviews you'd like to consider for the scraper: "))
+    date_limit = datetime.strptime(datetime.strptime(input("\nEnter the oldest date you'd like to consider for the scraper (for example: 15/11/2001 => dd/mm/yyyy): "), '%d/%m/%Y').strftime("%d/%m/%Y"), '%d/%m/%Y')
 
 
     total_data = []
@@ -68,6 +59,7 @@ try:
         except:
             return 'null'
 
+    print("\nCreating browser instance & going through all the comments for each link...\n")
     for url in urls:
         try:
             wb = webdriver.Chrome(executable_path=dp)
@@ -92,7 +84,7 @@ try:
                 break
         #reviews__body__review
         collection = wb.find_elements_by_css_selector("article.reviews__body__review")
-
+     
         for rev in collection:
             title = find_attribute(rev, "h4[class*='review__title']", "innerText")
             date = find_attribute(rev, "p[class*='review__date']", "innerText")
@@ -110,11 +102,13 @@ try:
             if realdate >= date_limit: 
                 cols = [_id, datetime.strftime(realdate, "%d/%m/%Y"), title, rating]
                 total_data.append(cols)
-                print(cols)
+                #print(cols)
         wb.quit()
         #Remove this break statement to unleash the full power of the scraper, but it's very intensive.
         break
     
+    print("\nWriting all data to a csv file called reviews.csv...\n")
+
     c = open('reviews.csv', 'w', newline='')
     final = csv.writer(c)
     final.writerow(['ID', 'Review Date', 'Activity Name', 'Star Rating (/5)'])
