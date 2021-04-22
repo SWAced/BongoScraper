@@ -44,11 +44,15 @@ try:
 
     amount = int(wb.find_elements_by_css_selector("span.search-result-label__number.qa-search-result-label-number")[0].get_attribute('innerText'))
     #print(amount)
+    try:
+        wb.find_element_by_id("onetrust-accept-btn-handler").click()
+    except:
+        pass
 
     while True:
         try:
-            wb.find_element_by_id("search-more-results").click()
             time.sleep(delay)
+            wb.find_element_by_id("search-more-results").click()
         except:
             break
 
@@ -66,6 +70,8 @@ try:
         link = find_attribute(product, "a.thematic__wrapper-link", 'href')
         title = find_attribute(product, "h3[data-bind*='box_name']", "innerText")
         amount_of_reviews = find_attribute(product, "span.rating__number-reviews", 'innerText')
+        if amount_of_reviews != 'null':
+            amount_of_reviews = int(amount_of_reviews)
         price = find_attribute(product, "span.qa-thematic-price", 'innerText')
         rating = float(float(find_attribute(product, "a.thematic__wrapper-link", 'data-product-reviewrating').replace(",", ".")) / 2)
         testid = re.findall(r"-(\d+)\.html", link)
