@@ -89,8 +89,8 @@ try:
             title = find_attribute(rev, "h4[class*='review__title']", "innerText")
             date = find_attribute(rev, "p[class*='review__date']", "innerText")
             realdate = datetime.strptime(datetime.strptime(date, '%d/%m/%Y').strftime("%d/%m/%Y"), '%d/%m/%Y')
-            if find_attribute(rev, "meta[itemprop*='ratingValue']", "content") == 'null' or find_attribute(rev, "meta[itemprop*='ratingValue']", "content") == '0':
-                rating = float(0)
+            if find_attribute(rev, "meta[itemprop*='ratingValue']", "content") == 'null':
+                rating = float(-1)
             else:
                 rating = float(float(find_attribute(rev, "meta[itemprop*='ratingValue']", "content")) / 2)
 
@@ -103,6 +103,8 @@ try:
                 cols = [_id, datetime.strftime(realdate, "%d/%m/%Y"), title, rating]
                 total_data.append(cols)
                 #print(cols)
+            else:
+                break
         wb.quit()
         #Remove this break statement to unleash the full power of the scraper, but it's very intensive.
         break
